@@ -672,10 +672,10 @@ def universal_transformer_highway(layer_inputs,
 
   new_state = state * carry_gate + transformed_state * transform_gate
 
-  contrib.summary().scalar("highway_transform_gate_layer",
+  tf.summary.scalar("highway_transform_gate_layer",
                            tf.reduce_mean(transform_gate))
 
-  contrib.summary().scalar("highway_carry_gate_layer",
+  tf.summary.scalar("highway_carry_gate_layer",
                            tf.reduce_mean(carry_gate))
 
   return new_state, inputs, memory
@@ -762,10 +762,10 @@ def universal_transformer_skip(layer_inputs,
         pad_remover=pad_remover,
         preprocess=True)
 
-  contrib.summary().scalar("skip_transform_gate_layer",
+  tf.summary.scalar("skip_transform_gate_layer",
                            tf.reduce_mean(transform_gate))
 
-  contrib.summary().scalar("skip_carry_gate_layer", tf.reduce_mean(carry_gate))
+  tf.summary.scalar("skip_carry_gate_layer", tf.reduce_mean(carry_gate))
 
   new_state = inputs * carry_gate + transformed_state * transform_gate
   return new_state, inputs, memory
@@ -880,7 +880,7 @@ def universal_transformer_with_gru_as_transition_function(
         activation=tf.sigmoid,
         pad_remover=pad_remover)
 
-    contrib.summary().scalar("gru_update_gate",
+    tf.summary.scalar("gru_update_gate",
                              tf.reduce_mean(transition_function_update_gate))
 
     # gru reset gate: r_t = sigmoid(W_r.x_t + U_r.h_{t-1})
@@ -892,7 +892,7 @@ def universal_transformer_with_gru_as_transition_function(
         activation=tf.sigmoid,
         pad_remover=pad_remover)
 
-    contrib.summary().scalar("gru_reset_gate",
+    tf.summary.scalar("gru_reset_gate",
                              tf.reduce_mean(transition_function_reset_gate))
     reset_state = transition_function_reset_gate * state
 
@@ -968,7 +968,7 @@ def universal_transformer_with_lstm_as_transition_function(
         activation=tf.sigmoid,
         pad_remover=pad_remover)
 
-    contrib.summary().scalar("lstm_input_gate",
+    tf.summary.scalar("lstm_input_gate",
                              tf.reduce_mean(transition_function_input_gate))
 
     # lstm forget gate: f_t = sigmoid(W_f.x_t + U_f.h_{t-1})
@@ -983,7 +983,7 @@ def universal_transformer_with_lstm_as_transition_function(
     transition_function_forget_gate = tf.sigmoid(
         transition_function_forget_gate + forget_bias_tensor)
 
-    contrib.summary().scalar("lstm_forget_gate",
+    tf.summary.scalar("lstm_forget_gate",
                              tf.reduce_mean(transition_function_forget_gate))
 
     # lstm output gate: o_t = sigmoid(W_o.x_t + U_o.h_{t-1})
@@ -995,7 +995,7 @@ def universal_transformer_with_lstm_as_transition_function(
         activation=tf.sigmoid,
         pad_remover=pad_remover)
 
-    contrib.summary().scalar("lstm_output_gate",
+    tf.summary.scalar("lstm_output_gate",
                              tf.reduce_mean(transition_function_output_gate))
 
     # lstm input modulation
@@ -1190,7 +1190,7 @@ def universal_transformer_act(x, hparams, ffn_unit, attention_unit):
   ponder_times = n_updates
   remainders = remainder
 
-  contrib.summary().scalar("ponder_times", tf.reduce_mean(ponder_times))
+  tf.summary.scalar("ponder_times", tf.reduce_mean(ponder_times))
 
   return new_state, (ponder_times, remainders)
 
