@@ -36,6 +36,7 @@ from tensor2tensor.utils import trainer_lib
 from tensor2tensor.utils import usr_dir
 import tensorflow.compat.v1 as tf
 
+import wandb
 
 flags = tf.flags
 FLAGS = flags.FLAGS
@@ -378,7 +379,7 @@ def run_std_server():
 
 def main(argv):
   tf.logging.set_verbosity(tf.logging.INFO)
-
+  wandb.init(sync_tensorboard=True)
   usr_dir.import_usr_dir(FLAGS.t2t_usr_dir)
 
   # If we just have to print the registry, do that and exit early.
