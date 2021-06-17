@@ -39,6 +39,7 @@ import tensorflow.compat.v1 as tf
 
 from tensorflow.core.protobuf import rewriter_config_pb2
 from tensorflow.python import debug
+from tensorflow.python.training import checkpoint_utils
 
 
 create_hparams = hparams_lib.create_hparams
@@ -60,9 +61,10 @@ def next_checkpoint(model_dir, timeout_mins=240):
   if timeout_mins != -1:
     timeout_secs = timeout_mins * 60
   while True:
-    last_ckpt = contrib.training().wait_for_new_checkpoint(
+    #last_ckpt = contrib.training().wait_for_new_checkpoint(
+    #    model_dir, last_ckpt, seconds_to_sleep=60, timeout=timeout_secs)
+    last_ckpt = checkpoint_utils.wait_for_new_checkpoint(
         model_dir, last_ckpt, seconds_to_sleep=60, timeout=timeout_secs)
-
     if last_ckpt is None:
       tf.logging.info(
           "Eval timeout: no new checkpoints within %dm" % timeout_mins)
@@ -77,7 +79,9 @@ def next_undecoded_checkpoint(model_dir, timeout_mins=240):
   last_step = 0
   while True:
     # Get the latest checkpoint.
-    last_ckpt = contrib.training().wait_for_new_checkpoint(
+    #last_ckpt = contrib.training().wait_for_new_checkpoint(
+    #    model_dir, last_ckpt, seconds_to_sleep=60, timeout=60 * timeout_mins)
+    last_ckpt = checkpoint_utils.wait_for_new_checkpoint(
         model_dir, last_ckpt, seconds_to_sleep=60, timeout=60 * timeout_mins)
     # Get all the checkpoint from the model dir.
     ckpt_path = tf.train.get_checkpoint_state(model_dir)
