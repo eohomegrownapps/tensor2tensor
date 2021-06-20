@@ -57,7 +57,13 @@ class AttentionVisualizer(object):
 
   def decode(self, integers):
     """List of ints to str."""
-    integers = list(np.squeeze(integers))
+    s = np.squeeze(integers)
+    if len(s.shape) == 0:
+      integers = list(np.ndarray.flatten(integers))
+    else:
+      integers = list(s)
+    if len(integers) == 1:
+      return str(integers[0])
     return self.encoders["targets"].decode(integers)
 
   def encode_list(self, integers):
@@ -67,7 +73,13 @@ class AttentionVisualizer(object):
 
   def decode_list(self, integers):
     """List of ints to list of str."""
-    integers = list(np.squeeze(integers))
+    s = np.squeeze(integers)
+    if len(s.shape) == 0:
+      integers = list(np.ndarray.flatten(integers))
+    else:
+      integers = list(s)
+    if len(integers) == 1:
+      return [str(integers[0])]
     return self.encoders["targets"].decode_list(integers)
 
   def get_vis_data_from_string(self, sess, input_string):
